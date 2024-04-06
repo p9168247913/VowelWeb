@@ -112,11 +112,12 @@ const newUser = catchAsync(async (req, res) => {
 			sendResponse(res, httpStatus.BAD_REQUEST, null, `This email is already registered with us, please use different email.`);
 			return
 		}
+
 		let addResponse = await userServices.newUser({
 			name,
 			email,
 			password,
-			profileImage,
+			profileImage: '/uploads/User/' + profileImage,
 			role,
 			addressLine1,
 			addressLine2,

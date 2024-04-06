@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const User = require('../user.model');
 const { number } = require('joi');
 const Address = require('../../address/address.model')
-
+const baseUrl = process.env.baseUrl
 /**
  * Create a Series
  * @param {Object} seriesData
@@ -68,8 +68,13 @@ const getAlluser = async (page, limit, filter, sort) => {
         const totalResults = await User.countDocuments(filterQuery);
         const totalPages = Math.ceil(totalResults / length);
 
+        const usersWithCompleteImageUrls = listResult.map(user => {
+            const profileImageUrl = user.profileImage ? baseUrl + user.profileImage : null;
+            return { ...user, profileImage:profileImageUrl };
+        });
+
         if (listResult) {
-            return { data: listResult, totalResults, totalPages, page: start, limit: length, status: true, code: 200 };
+            return { data: usersWithCompleteImageUrls, totalResults, totalPages, page: start, limit: length, status: true, code: 200 };
         }
         else {
             return { data: "User not found!", status: false, code: 400 };
