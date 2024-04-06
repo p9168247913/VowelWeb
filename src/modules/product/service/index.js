@@ -1,0 +1,1 @@
+module.exports.addProduct = require("./addProduct.service")
