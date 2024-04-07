@@ -1,13 +1,15 @@
 const httpStatus = require('http-status');
 const catchAsync = require('../../../utils/catchAsync');
-const adminService = require('../service');
+const ProductService = require('../service');
 const { sendResponse } = require('../../../utils/responseHandler');
 const pick = require('../../../utils/pick');
 const { convertToJSON } = require("../../../utils/helper");
 
-const getAllUserById = catchAsync(async (req, res) => {
-    const {id} = req.params
-    const list = await adminService.getUserById(id);
+const getProducts = catchAsync(async (req, res) => {
+    const {page, limit,  filter, sort} = await pick(req.query, ['page', 'limit', 'filter', 'sort'])
+
+    let filter_Json_data = filter ? convertToJSON(filter) : undefined;
+    const list = await ProductService.getProducts(page, limit, filter_Json_data, sort);
     if (list.status) {
       sendResponse(res, httpStatus.OK, list, null);
     } else {
@@ -23,4 +25,4 @@ const getAllUserById = catchAsync(async (req, res) => {
     }
 });
 
-module.exports = getAllUserById
+module.exports = getProducts

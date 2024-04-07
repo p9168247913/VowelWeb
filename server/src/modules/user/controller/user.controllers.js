@@ -80,7 +80,7 @@ const signupUser = catchAsync(async (req, res) => {
 
 const newUser = catchAsync(async (req, res) => {
 	try {
-		const profileImage = req.file.filename;
+		const profileImage = req.file?.filename;
 
 		const {
 			name,

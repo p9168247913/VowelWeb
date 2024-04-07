@@ -10,7 +10,7 @@ const router = express.Router();
 
 
 const storage = multer.diskStorage({
-  destination: './uploads/products',
+  destination: './uploads/Products',
   filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
@@ -28,9 +28,9 @@ const upload = multer({
 
 router.post('/add', upload.single('productImage'), validate(productValidation), auth("adminAccess"), productController.addProduct);
 
-// router.get('/', auth(), departmentController.getDepartment);
+router.get('/', auth(), productController.getProducts);
 
-// router.put('/update/:id', validate(departmentValidations), auth(), departmentController.updateDepartment);
+router.put('/update/:id',  upload.single('productImage'), validate(productValidation), auth(), productController.updateProduct);
 
 // router.put('/delete/:id', auth(), departmentController.deleteDepartment);
 
