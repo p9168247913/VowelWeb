@@ -32,6 +32,6 @@ router.get('/', auth(), productController.getProducts);
 
 router.put('/update/:id',  upload.single('productImage'), validate(productValidation), auth(), productController.updateProduct);
 
-// router.put('/delete/:id', auth(), departmentController.deleteDepartment);
+router.put('/delete/:id', auth("adminAccess"), productController.deleteProduct);
 
 module.exports = router;

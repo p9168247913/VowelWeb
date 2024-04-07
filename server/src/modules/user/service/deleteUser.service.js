@@ -9,7 +9,7 @@ const deleteUser = async (userId) => {
     const deleteAddress = await addressModel.findOneAndUpdate({ _id: new mongoose.Types.ObjectId(deleteResult.address) }, { active: false }, { new: true })
 
     if (deleteResult && deleteAddress) {
-      return { data: "User Deleted succefully!!", status: true, code: 200 };
+      return { data: "User deleted successfully!!", status: true, code: 200 };
     }
     else {
       return { data: "User Not Found!!", status: false, code: 400 };
