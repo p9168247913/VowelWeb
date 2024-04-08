@@ -8,7 +8,7 @@ const { convertToJSON } = require("../../../utils/helper");
 const getAlluser = catchAsync(async (req, res) => {
     const {page, limit,  filter, sort} = await pick(req.query, ['page', 'limit', 'filter', 'sort'])
 
-    let filter_Json_data = filter ? convertToJSON(filter) : undefined;
+    let filter_Json_data = filter ? convertToJSON(filter) : '{}';
     const list = await adminService.getAlluser(page, limit, filter_Json_data, sort);
     if (list.status) {
       sendResponse(res, httpStatus.OK, list, null);

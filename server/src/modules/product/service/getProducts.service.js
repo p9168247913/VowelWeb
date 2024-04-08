@@ -36,18 +36,18 @@ const getProducts = async (page, limit, filter, sort) => {
 
         const products = await Product.find(filterQuery).sort(sortQuery).skip(skip).limit(length);
 
-        // Map products to add complete image URLs
-        const productsWithUrls = products.map(product => {
-            // If productImage is available, prepend baseUrl to generate complete URL
-            const productImage = product.productImage ? baseUrl + product.productImage : null;
-            return { ...product.toObject(), productImage };
-        });
+        // // Map products to add complete image URLs
+        // const productsWithUrls = products.map(product => {
+        //     // If productImage is available, prepend baseUrl to generate complete URL
+        //     const productImage = product.productImage ? baseUrl + product.productImage : null;
+        //     return { ...product.toObject(), productImage };
+        // });
 
         const totalResults = await Product.countDocuments(filterQuery);
         const totalPages = Math.ceil(totalResults / length);
 
         if (products) {
-            return { data: productsWithUrls, totalPages, totalResults, page: start, limit: length, status: true, code: 200 };
+            return { data: products, totalPages, totalResults, page: start, limit: length, status: true, code: 200 };
         }
         else {
             return { data: "Product not found!", status: false, code: 400 };

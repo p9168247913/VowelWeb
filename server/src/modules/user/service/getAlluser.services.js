@@ -55,7 +55,7 @@ const getAlluser = async (page, limit, filter, sort) => {
                 }
             },
             {
-                $unwind:"$address"
+                $unwind: "$address"
             },
             {
                 $project: {
@@ -70,9 +70,8 @@ const getAlluser = async (page, limit, filter, sort) => {
 
         const usersWithCompleteImageUrls = listResult.map(user => {
             const profileImageUrl = user.profileImage ? baseUrl + user.profileImage : null;
-            return { ...user, profileImage:profileImageUrl };
+            return { ...user, profileImage: profileImageUrl };
         });
-
         if (listResult) {
             return { data: usersWithCompleteImageUrls, totalResults, totalPages, page: start, limit: length, status: true, code: 200 };
         }

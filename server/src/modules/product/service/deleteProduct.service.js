@@ -5,7 +5,6 @@ const deleteProduct = async (userId) => {
   try {
     // const seriesearchQuery = { active: true, _id: new mongoose.Types.ObjectId(userId) };
     const deleteResult = await Product.findOneAndUpdate({ _id: new mongoose.Types.ObjectId(userId) }, { active: false }, { new: true })
-console.log(deleteResult);
     if (deleteResult) {
       return { data: "Product deleted successfully!!", status: true, code: 200 };
     }

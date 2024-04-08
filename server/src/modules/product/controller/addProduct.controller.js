@@ -6,9 +6,9 @@ const ProductService = require('../service')
 const upload = require('../../../middlewares/multer');
 
 const addProduct = async(req, res) =>{
-    const productImage = req.file?.filename
-    const { name, price, description } = await pick(req.body, ['name', 'price', 'description'])
-    const addResult = await ProductService.addProduct({ name, price, description, productImage: productImage?'/uploads/products/' + productImage: null,});
+    // const productImage = req.file?.filename
+    const { name, price, description, productImage } = await pick(req.body, ['name', 'price', 'description', 'productImage'])
+    const addResult = await ProductService.addProduct({ name, price, description, productImage});
     if (addResult.status) {
         sendResponse(res, httpStatus.OK, addResult, null);
     } else {
