@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { toJSON, paginate } = require('../../plugins');
 const counterIncrementor = require('../../utils/counterIncrementer')
 
-const productSchema = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -30,15 +30,15 @@ const productSchema = new mongoose.Schema({
     timestamps: true,
 });
 
-productSchema.plugin(toJSON);
-productSchema.plugin(paginate);
+cartSchema.plugin(toJSON);
+cartSchema.plugin(paginate);
 
-productSchema.pre('save', async function (next) {
+cartSchema.pre('save', async function (next) {
     const doc = this;
     doc.seqId = await counterIncrementor('Cart');
-    doc.productNo = `AT` + (1000 + doc.seqId);
+    doc.cartNo = `AT` + (1000 + doc.seqId);
     next();
 });
 
-const Product = mongoose.model('Product', productSchema);
-module.exports = Product
+const Cart = mongoose.model('Cart', cartSchema);
+module.exports = Cart
