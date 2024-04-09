@@ -2,11 +2,11 @@ const httpStatus = require('http-status');
 const pick = require('../../../utils/pick');
 const catchAsync = require('../../../utils/catchAsync');
 const { sendResponse } = require('../../../utils/responseHandler');
-const ProductService = require('../service');
+const CartService = require('../service');
 
 const deleteProduct = catchAsync(async (req, res) => {
   const { id  } = await pick(req.params, ['id'])
-  const deleteResult = await ProductService.deleteProduct(id);
+  const deleteResult = await CartService.deleteCart(id);
   if (deleteResult.status) {
     sendResponse(res, httpStatus.OK, deleteResult, null);
   } else {

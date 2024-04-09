@@ -222,6 +222,47 @@ const Products = () => {
         }
     };
 
+    const handleAddToCart = async(productId) => {
+        const result = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'Add this product to cart',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, add it!'
+        });
+        
+        if (result.isConfirmed) {
+            try {
+                const response = await axios.post(`${baseUrl}/v1/cart/add`,{productId, userId: user.id},  {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                console.log(response);
+                if (response.status === 200) {
+                    toast({
+                        title: 'Product Added to Cart',
+                        status: 'success',
+                        duration: 4000,
+                        isClosable: true,
+                    });
+                    getProducts();
+                }
+            } catch (error) {
+                console.log(error);
+                toast({
+                    title: 'Error',
+                    description: error.response.data.data,
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                });
+            }
+        }
+    }
+
     return (
         <>
             <div className="table-responsive p-3">
@@ -269,7 +310,7 @@ const Products = () => {
                                                 <IconButton icon={<FaTrash />} onClick={() => handleDeleteProduct(product.id)} aria-label="Delete" mr={2} />
                                             </>
                                         )}
-                                        <IconButton icon={<FaCartPlus />} aria-label="Add to Cart" />
+                                        <IconButton onClick={() => handleAddToCart(product.id)} icon={<FaCartPlus />} aria-label="Add to Cart" />
                                     </Flex>
                                 </Box>
                             </Box>

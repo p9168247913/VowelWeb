@@ -4,7 +4,7 @@ const Cart = require('../cart.model');
 const deleteProduct = async (userId) => {
   try {
     // const seriesearchQuery = { active: true, _id: new mongoose.Types.ObjectId(userId) };
-    const deleteResult = await Cart.findOneAndUpdate({ _id: new mongoose.Types.ObjectId(userId) }, { active: false }, { new: true })
+    const deleteResult = await Cart.findOneAndDelete({ _id: new mongoose.Types.ObjectId(userId) })
     if (deleteResult) {
       return { data: "Product removed from cart!!", status: true, code: 200 };
     }

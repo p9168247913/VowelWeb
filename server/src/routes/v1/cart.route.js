@@ -12,6 +12,6 @@ router.get('/:id', auth(), cartController.getCartById);
 
 // router.put('/update/:id',  upload.single('productImage'), validate(cartValidation), auth("adminAccess"), cartController.updateProduct);
 
-// router.put('/delete/:id', auth("adminAccess"), cartController.deleteProduct);
+router.delete('/delete/:id', auth(), cartController.deleteCart);
 
 module.exports = router;
