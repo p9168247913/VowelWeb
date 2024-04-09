@@ -78,7 +78,6 @@ const isPasswordMatch = async (password, user) => {
 * @returns {Promise<User>}
 */
 const createSocialUser = async (userBody) => {
-	console.log(userBody.email, 'testcreatsocialuser')
 	if (await User.isEmailTaken(userBody.email)) {
 		return { user: null, status: false, code: 403, data: { msg: 'Email already taken' } };
 
@@ -221,7 +220,6 @@ const admingetUsersServices = async (page, limit, filter, sort) => {
 			code: 200,
 		};
 	} catch (error) {
-		console.log("Error while getting product list :", error)
 		return { status: false, code: 500, msg: error }
 	}
 }

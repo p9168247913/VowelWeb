@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Product = require('../product.model');
+const Cart = require('../cart.model');
 
 /**
  * Create a Series
@@ -9,7 +9,7 @@ const Product = require('../product.model');
 const updateProduct = async (id, productData) => {
     try {
         const searchQuery = { active: true, _id: id };
-        const addResult = await Product.findOneAndUpdate(
+        const addResult = await Cart.findOneAndUpdate(
             searchQuery,
             { name: productData.name, price: productData.price, description: productData.description, productImage: productData.productImage},
             { new: true }

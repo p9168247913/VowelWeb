@@ -1,5 +1,4 @@
-module.exports.addProduct = require("./addProduct.controller");
-module.exports.getProducts = require("./getProducts.controller");
-module.exports.getProductById = require("./getProductById.controller");
-module.exports.updateProduct = require("./updateProduct.controller");
-module.exports.deleteProduct = require("./deleteProduct.controller");
+module.exports.addCart = require("./addCart.controller");
+module.exports.getCartById= require("./getCartById.controller");
+module.exports.updateCart = require("./updateCart.controller");
+module.exports.deleteCart = require("./deleteCart.controller");

@@ -2,13 +2,11 @@ const httpStatus = require('http-status');
 const pick = require('../../../utils/pick');
 const catchAsync = require('../../../utils/catchAsync');
 const { sendResponse } = require('../../../utils/responseHandler');
-const ProductService = require('../service')
-const upload = require('../../../middlewares/multer');
+const CartService = require('../service')
 
-const addProduct = async(req, res) =>{
-    // const productImage = req.file?.filename
-    const { name, price, description, productImage, userId } = await pick(req.body, ['name', 'price', 'description', 'productImage'])
-    const addResult = await ProductService.addProduct({ name, price, description, productImage, userId});
+const addCart = async(req, res) =>{
+    const { productId, userId } = await pick(req.body, ['productId','userId'])
+    const addResult = await CartService.addCart({ productId, userId});
     if (addResult.status) {
         sendResponse(res, httpStatus.OK, addResult, null);
     } else {
@@ -24,4 +22,4 @@ const addProduct = async(req, res) =>{
     }
 }
 
-module.exports = addProduct
+module.exports = addCart

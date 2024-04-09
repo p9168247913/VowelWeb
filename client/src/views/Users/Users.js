@@ -33,8 +33,7 @@ const Users = () => {
 
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjExN2U4NThkODJkNzU4MDJiY2FiNjEiLCJpYXQiOjE3MTI1NTcxMzcsImV4cCI6MTcxNTE0OTEzNywidHlwZSI6ImFjY2VzcyJ9.FXfNDwWE6IhwpmyPeRdoq07tkGlcec_CKOyWWVTHKec"
   let token = localStorage.getItem('accessToken')
-  console.log(typeof token);
-  console.log(token);
+  
   useEffect(() => {
     getUsers();
   }, [searchName, currentPage]);
@@ -94,7 +93,6 @@ const Users = () => {
     }
   };
   
-
   const nextPage = () => {
     if (currentPage < totalPages) { // Check if current page is less than total pages
       setCurrentPage(currentPage + 1);

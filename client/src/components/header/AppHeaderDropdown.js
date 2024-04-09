@@ -18,10 +18,11 @@ import {
   cilLockLocked,
   // cilSettings,
   // cilTask,
-  // cilUser,
+  cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import logoSvg from 'src/icons/dropdown-arrow-svgrepo-com.svg';
+import { FaUserCog } from "react-icons/fa";
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -29,19 +30,20 @@ import logoSvg from 'src/icons/dropdown-arrow-svgrepo-com.svg';
 
 const AppHeaderDropdown = () => {
 
-  const handleLogout =()=>{
+  const handleLogout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
-    window.location.href="/login";
+    window.location.href = "/login";
   }
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}  >
         {/* <CAvatar size="md" >Admin</CAvatar>
         <FontAwesomeIcon icon="fa-solid fa-caret-down"  /> */}
-        <button style={{ borderRadius:"4px" , padding:"5px" , display:"flex", border:'none', backgroundColor:"white" , padding:'5px 10px' , justifyContent:"space-between"}}><span>Admin</span> 
-          <img src={logoSvg} style={{height:"25px", width:"25px", }} alt=""/>
+        <button style={{ borderRadius: "4px", padding: "5px", display: "flex", border: 'none', backgroundColor: "white", padding: '5px 10px', justifyContent: "space-between" }}>
+          <span> <FaUserCog style={{ marginRight: "5px" }} /></span>
+          <img src={logoSvg} style={{ height: "25px", width: "25px", }} alt="" />
         </button>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">
@@ -101,7 +103,7 @@ const AppHeaderDropdown = () => {
         <CDropdownItem href="#">
           <CIcon icon={cilLockLocked} className="me-2" />
           <button onClick={handleLogout}>Lock Account</button>
-          
+
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

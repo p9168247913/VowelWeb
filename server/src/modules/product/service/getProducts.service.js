@@ -9,8 +9,8 @@ const baseUrl = process.env.baseUrl
  */
 const getProducts = async (page, limit, filter, sort) => {
     try {
-        const length = limit && parseInt(limit, 10) > 0 ? parseInt(limit, 10) : 10;
-        const start = page && parseInt(page, 10) > 0 ? parseInt(page, 10) : 1;
+        const length = limit && parseInt(limit, 12) > 0 ? parseInt(limit, 12) : 12;
+        const start = page && parseInt(page, 12) > 0 ? parseInt(page, 12) : 1;
         const skip = (start - 1) * length;
 
         let filterQuery = { active: true };
@@ -35,13 +35,6 @@ const getProducts = async (page, limit, filter, sort) => {
         }
 
         const products = await Product.find(filterQuery).sort(sortQuery).skip(skip).limit(length);
-
-        // // Map products to add complete image URLs
-        // const productsWithUrls = products.map(product => {
-        //     // If productImage is available, prepend baseUrl to generate complete URL
-        //     const productImage = product.productImage ? baseUrl + product.productImage : null;
-        //     return { ...product.toObject(), productImage };
-        // });
 
         const totalResults = await Product.countDocuments(filterQuery);
         const totalPages = Math.ceil(totalResults / length);

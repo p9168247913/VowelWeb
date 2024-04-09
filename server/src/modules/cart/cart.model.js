@@ -3,21 +3,15 @@ const { toJSON, paginate } = require('../../plugins');
 const counterIncrementor = require('../../utils/counterIncrementer')
 
 const cartSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
+    productId:{
+        type: mongoose.Types.ObjectId,
+        ref: 'Product',
+        required: true
     },
-    productImage:{
-        type: String,
-        required: true,
-    },
-    price:{
-        type: String,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: true,
+    userId:{
+        type: mongoose.Types.ObjectId,
+        ref: 'users',
+        required: true
     },
     active: {
         type: Boolean,

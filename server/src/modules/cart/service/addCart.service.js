@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
-const Product = require('../product.model');
+const Cart = require('../cart.model');
 
 /**
  * Create a Series
  * @param {Object} collectionData
  * @returns {Promise<Series>}
  */
-const addCart = async (productData) => {
+const addCart = async (cartData) => {
     try {
-        const addResult = await Product.create({ ...productData});
+        const addResult = await Cart.create({ ...cartData});
         if (addResult) {
             return { data: addResult, status: true, code: 200 };
         }

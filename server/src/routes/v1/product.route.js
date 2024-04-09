@@ -30,7 +30,7 @@ router.post('/add', upload.single('productImage'), validate(productValidation), 
 
 router.get('/', auth(), productController.getProducts);
 
-router.put('/update/:id',  upload.single('productImage'), validate(productValidation), auth(), productController.updateProduct);
+router.put('/update/:id',  upload.single('productImage'), validate(productValidation), auth("adminAccess"), productController.updateProduct);
 
 router.put('/delete/:id', auth("adminAccess"), productController.deleteProduct);
 
