@@ -8,7 +8,7 @@ const Cart = require('../cart.model');
  */
 const addCart = async (cartData) => {
     try {
-        const existingCartItem = await Cart.findOne({ productId: cartData.productId });
+        const existingCartItem = await Cart.findOne({ productId: cartData.productId, userId: cartData.userId });
 
         if (existingCartItem) {
             return { data: "Product already exists in the cart!", status: false, code: 400 };

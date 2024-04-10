@@ -84,7 +84,7 @@ const Users = () => {
       console.log(error);
       toast({
         title: 'Error',
-        description: "An error occurred while fetching users.",
+        description:error.response.data.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
