@@ -14,6 +14,9 @@ import {
 } from '@coreui/icons';
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react';
 
+const user = JSON.parse(localStorage.getItem('user'));
+const isAdmin = user.role === 'admin';
+
 const _nav = [
   {
     component: CNavItem,
@@ -25,7 +28,7 @@ const _nav = [
     component: CNavTitle,
     name: 'Managements',
   },
-  {
+  isAdmin ? {
     component: CNavGroup,
     name: 'Users',
     to: '/base',
@@ -36,36 +39,20 @@ const _nav = [
         name: 'Users',
         to: '/users',
       },
-      // {
-      //   component: CNavItem,
-      //   name: 'Blocked Users',
-      //   to: '/blocked-users',
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Sub Admins',
-      //   to: '/sub-admin',
-      // },
     ]
-  },
+  } : null,
   {
     component: CNavItem,
     name: 'Orders',
     to: '/orders',
     icon: <CIcon icon={cilList} customClassName="nav-icon" />,
   },
-  // {
-  //   component: CNavItem,
-  //   name: 'Products',
-  //   to: '/products',
-  //   icon: <CIcon icon={cilStorage} customClassName="nav-icon" />,
-  // },  
   {
     component: CNavItem,
     name: 'Cart',
     to: '/cart',
     icon: <CIcon icon={cilCart} customClassName="nav-icon" />,
   },
-]
+].filter(Boolean);
 
-export default _nav
+export default _nav;

@@ -47,7 +47,7 @@ const Cart = () => {
                     Authorization: `Bearer ${token}`
                 }
             });
-            if (response.status === 200) {
+            if (response?.status === 200) {
                 const itemsWithQuantity = response.data.data.data.map(item => ({
                     ...item,
                     quantity: 1
@@ -56,7 +56,13 @@ const Cart = () => {
                 calculateTotalPrice(itemsWithQuantity);
             }
         } catch (error) {
-            console.error('Error fetching cart items:', error);
+            toast({
+                title: 'Error',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            })
         }
     };
 
@@ -104,7 +110,13 @@ const Cart = () => {
                 fetchCartItems();
             }
         } catch (error) {
-            console.log(error);
+            toast({
+                title: 'Error',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            })
         }
     };
 
@@ -119,7 +131,13 @@ const Cart = () => {
                 setUserAddress(response.data.data.data)
             }
         } catch (error) {
-            console.log(error);
+            toast({
+                title: 'Error',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            })
         }
     }
 

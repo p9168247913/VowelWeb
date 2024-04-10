@@ -131,7 +131,8 @@ const Products = () => {
         } catch (error) {
             toast({
                 title: 'Error',
-                status: 'error',
+                statu: 'error',
+                description: error.response.data.message,
                 duration: 4000,
                 isClosable: true,
             })
@@ -192,10 +193,10 @@ const Products = () => {
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, delete it!'
         });
-        
+
         if (result.isConfirmed) {
             try {
-                const response = await axios.put(`${baseUrl}/v1/product/delete/${productId}`,{},  {
+                const response = await axios.put(`${baseUrl}/v1/product/delete/${productId}`, {}, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -222,7 +223,7 @@ const Products = () => {
         }
     };
 
-    const handleAddToCart = async(productId) => {
+    const handleAddToCart = async (productId) => {
         const result = await Swal.fire({
             title: 'Are you sure?',
             text: 'Add this product to cart',
@@ -232,10 +233,10 @@ const Products = () => {
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Yes, add it!'
         });
-        
+
         if (result.isConfirmed) {
             try {
-                const response = await axios.post(`${baseUrl}/v1/cart/add`,{productId, userId: user.id},  {
+                const response = await axios.post(`${baseUrl}/v1/cart/add`, { productId, userId: user.id }, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -251,7 +252,6 @@ const Products = () => {
                     getProducts();
                 }
             } catch (error) {
-                console.log(error);
                 toast({
                     title: 'Error',
                     description: error.response.data.data,

@@ -36,12 +36,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(`${baseUrl}/v1/auth/login`, { email, password });
-      console.log(response);
       if (response.data.code === 200) {
-
         toast({
           title: 'Login Successful',
-          // description: data.msg,
           status: 'success',
           duration: 4000,
           isClosable: true,
@@ -56,20 +53,11 @@ const Login = () => {
 
         setEmail('');
         setPassword('');
-      } else {
-        toast({
-          title: 'Login Error',
-          description: 'Invalid email or password',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-          position: "top"
-        });
       }
     } catch (error) {
       toast({
-        title: 'Server Error',
-        description: 'Try after sometime!!',
+        title: 'Error',
+        description: error.response.data.data,
         status: 'error',
         duration: 3000,
         isClosable: true,
