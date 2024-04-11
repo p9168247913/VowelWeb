@@ -76,7 +76,7 @@ const Login = () => {
                 <CCardBody>
                   <CForm onSubmit={handleSubmit}>
                     <h1 style={{ color: "rgb(199,205,215)", }}>Login</h1>
-                    <p style={{ color: "white", }}>Sign In to Admin account</p>
+                    <p style={{ color: "white", }}>Sign In to your account</p>
                     <CInputGroup className="mb-3" style={{ marginTop: "30px" }}>
                       <CInputGroupText>
                         <CIcon icon={cilUser} />
@@ -100,11 +100,11 @@ const Login = () => {
                           Login
                         </CButton>
                       </CCol>
-                      <CCol xs={6} className="text-right" style={{ marginTop: "40px", }}>
+                      {/* <CCol xs={6} className="text-right" style={{ marginTop: "40px", }}>
                         <CButton color="link" style={{ color: "white", fontWeight: "400" }}>
                           Forgot password?
                         </CButton>
-                      </CCol>
+                      </CCol> */}
                     </CRow>
                   </CForm>
                 </CCardBody>

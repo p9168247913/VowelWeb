@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import baseUrl from 'src/URL/baseUrl';
 import { useDropzone } from 'react-dropzone';
+import Swal from 'sweetalert2';
 
 const Users = () => {
   const [data, setData] = useState([]);
@@ -33,7 +34,7 @@ const Users = () => {
 
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NjExN2U4NThkODJkNzU4MDJiY2FiNjEiLCJpYXQiOjE3MTI1NTcxMzcsImV4cCI6MTcxNTE0OTEzNywidHlwZSI6ImFjY2VzcyJ9.FXfNDwWE6IhwpmyPeRdoq07tkGlcec_CKOyWWVTHKec"
   let token = localStorage.getItem('accessToken')
-  
+
   useEffect(() => {
     getUsers();
   }, [searchName, currentPage]);
@@ -55,12 +56,12 @@ const Users = () => {
       let queryParams = {
         page_no: currentPage ? currentPage : 1,
       };
-      let filterData = {}; // Define filterData
-  
+      let filterData = {};
+
       if (searchName !== "") {
         filterData = { ...filterData, name: searchName };
       }
-  
+
       const response = await axios.get(`${baseUrl}/v1/auth/users`, {
         params: {
           page: queryParams.page_no,
@@ -70,9 +71,9 @@ const Users = () => {
           "Authorization": `Bearer ${token}`
         }
       });
-  
+
       console.log(response);
-  
+
       if (response.status === 200) {
         setData(response.data.data.data);
         setTotalPages(response.data.data.totalPages);
@@ -84,7 +85,7 @@ const Users = () => {
       console.log(error);
       toast({
         title: 'Error',
-        description:error.response.data.message,
+        description: error.response.data.message,
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -92,9 +93,9 @@ const Users = () => {
       });
     }
   };
-  
+
   const nextPage = () => {
-    if (currentPage < totalPages) { // Check if current page is less than total pages
+    if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
   };
@@ -178,23 +179,44 @@ const Users = () => {
     };
   };
 
-  const handleDelete = (id) => {
-    axios.delete(`http://localhost:8080/users/${id}`)
-      .then((response) => {
-        toast({
-          title: 'User deleted successfuly!!',
-          description: "",
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-          position: "top"
-        });
-        getUsers()
-      })
-      .catch((error) => {
+  const handleDeleteUser = async (userId) => {
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will not be able to recover this user!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!'
+    });
 
-        console.log(error);
-      });
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.put(`${baseUrl}/v1/auth/deleteUser/${userId}`, {}, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
+        if (response.status === 200) {
+          toast({
+            title: 'User Deleted',
+            status: 'success',
+            duration: 4000,
+            isClosable: true,
+          });
+          getUsers();
+        }
+      } catch (error) {
+        toast({
+          title: 'Error',
+          description: error.response.data.message,
+          status: 'error',
+          duration: 4000,
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (
@@ -237,7 +259,7 @@ const Users = () => {
               <td style={{ textAlign: "center", fontWeight: "500" }}>{item.address.addressLine1 + ", " + item.address.city + ", " + item.address.state + ", " + item.address.country + "-" + item.address.zipcode}</td>
               <td style={{ display: "flex", columnGap: '10px', alignItems: "center" }}>
                 <button className="btn" ><FaEdit /></button>
-                <button className="btn " onClick={() => handleDelete(item._id)}><FaTrash /></button>
+                <button className="btn " onClick={() => handleDeleteUser(item._id)}><FaTrash /></button>
               </td>
             </tr>
           ))}

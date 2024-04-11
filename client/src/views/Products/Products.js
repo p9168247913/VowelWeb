@@ -100,6 +100,8 @@ const Products = () => {
 
     useEffect(() => {
         getProducts();
+     getData1()
+
     }, [searchName, currentPage]);
 
     const getProducts = async () => {
@@ -260,6 +262,16 @@ const Products = () => {
                     isClosable: true,
                 });
             }
+        }
+    }
+
+    const getData1 = async()=>{
+        try {
+            let response = await axios.get("https://dummyjson.com/products")
+            console.log("product response",response.data.products)
+
+        } catch (error) {
+            console.log(error);
         }
     }
 

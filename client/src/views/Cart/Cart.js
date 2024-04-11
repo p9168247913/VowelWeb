@@ -1,14 +1,18 @@
+
+
 import React, { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import baseUrl from 'src/URL/baseUrl';
 import { Modal, Button } from 'react-bootstrap';
+import { loadStripe } from '@stripe/stripe-js';
 
 const Cart = () => {
     const toast = useToast();
     const [cartItems, setCartItems] = useState([]);
     const [selectedItemIds, setSelectedItemIds] = useState([]);
+    const [selectedQuantities, setSelectedQuantities] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
     const [showModal, setShowModal] = useState(false);
     const [address, setAddress] = useState('');
@@ -16,6 +20,9 @@ const Cart = () => {
     const [selectedAddress, setSelectedAddress] = useState('');
     const [userAddress, setUserAddress] = useState({});
     const completeAddress = userAddress?.addressLine1 + ", " + userAddress?.addressLine2 + ", " + userAddress?.city + ", " + userAddress?.state + ", " + userAddress?.country + "-" + userAddress?.zipcode
+
+    const stripePromise = loadStripe("pk_test_51P4FPRSJ4lv8dWzjNRDf0WNOs2tfULuEOy6lGekXRpSuMKSBeXIYKvd4z41yOthfu8PuHXgX22Dq4j93RPzRnBaU00Hg5A21XB")
+
 
     const handleShowModal = () => setShowModal(true);
     const handleCloseModal = () => setShowModal(false);
@@ -48,11 +55,11 @@ const Cart = () => {
                 }
             });
             if (response?.status === 200) {
-                const itemsWithQuantity = response.data.data.data.map(item => ({
+                const itemsWithQuantity = response?.data?.data?.data.map(item => ({
                     ...item,
                     quantity: 1
                 }));
-                setCartItems(itemsWithQuantity);
+                setCartItems(itemsWithQuantity.reverse());
                 calculateTotalPrice(itemsWithQuantity);
             }
         } catch (error) {
@@ -68,12 +75,16 @@ const Cart = () => {
 
     const handleItemCheckboxChange = (item) => {
         const selectedIds = selectedItemIds ? [...selectedItemIds] : [];
+        const quantities = { ...selectedQuantities };
         if (selectedIds.includes(item._id)) {
             selectedIds.splice(selectedIds.indexOf(item._id), 1);
+            delete quantities[item._id];
         } else {
             selectedIds.push(item._id);
+            quantities[item._id] = item.quantity;
         }
         setSelectedItemIds(selectedIds);
+        setSelectedQuantities(quantities);
         calculateTotalPrice(selectedIds);
     };
 
@@ -85,6 +96,8 @@ const Cart = () => {
             return item;
         });
         setCartItems(updatedCartItems);
+        // calculateTotalPrice(updatedCartItems);
+
         const previousContribution = cartItems.find(item => item._id === itemId).products.price * cartItems.find(item => item._id === itemId).quantity;
         setTotalPrice(prevTotalPrice => (prevTotalPrice - previousContribution + parseFloat(updatedCartItems.find(item => item._id === itemId).products.price) * quantity).toFixed(2));
     };
@@ -141,16 +154,74 @@ const Cart = () => {
         }
     }
 
-    const handlePay = () => {
-        console.log(totalPrice);
-        console.log(selectedAddress)
-        console.log(selectedItemIds)
+    const handlePay = async () => {
+        const lineItems = cartItems
+            .filter(item => selectedItemIds.includes(item._id))
+            .map(item => ({
+                price_data: {
+                    currency: 'inr',
+                    product_data: {
+                        name: item.products.name,
+                        description: item.products.description,
+                    },
+                    unit_amount: parseFloat(item.products.price) * 100,
+                },
+                quantity: item.quantity,
+            }));
+
+        // Make POST request to backend API to create a Stripe session
+        try {
+            // console.log(user.name, selectedAddress);
+            // console.log()
+            const response = await axios.post(`${baseUrl}/v1/payment/payment-session`, {
+                lineItems,
+                customerName: user.name,
+                customerAddress: {
+                    line1: userAddress.addressLine1,
+                    postal_code: userAddress.zipcode,
+                    city: userAddress.city,
+                    state: userAddress.state,
+                    country: userAddress.country,
+                  },
+                  selectedProducts: selectedItemIds,
+                  address: selectedAddress,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            const sessionId = response.data.id;
+
+            // Redirect the user to Stripe Checkout
+            const stripe = await stripePromise;
+            const { error } = await stripe.redirectToCheckout({ sessionId });
+
+            if (error) {
+                toast({
+                    title: 'Payment Error',
+                    description: error.message,
+                    status: 'error',
+                    duration: 4000,
+                    isClosable: true,
+                });
+            }
+        } catch (error) {
+            toast({
+                title: 'Error',
+                description: error.response.data.message,
+                status: 'error',
+                duration: 4000,
+                isClosable: true,
+            });
+        }
     };
+
 
     return (
         <div>
-            <div style={{ width: "100%", height: "70vh", display: 'flex', gap: "10px", }}>
-                <div style={{ width: "70%", height: "95%", maxHeight: "70vh", overflow: "auto", marginLeft: "-50px" }}>
+            <div style={{ width: "100%", height: "80vh", display: 'flex', gap: "10px", }}>
+                <div style={{ width: "70%", height: "95%", maxHeight: "80vh", overflow: "auto", marginLeft: "-50px" }}>
                     {
                         cartItems && cartItems.length > 0 ?
                             cartItems.map((item, i) => (
@@ -245,7 +316,7 @@ const Cart = () => {
                             : <h4>Your Cart is empty</h4>
                     }
                 </div>
-                <div style={{ width: "1px", height: "65vh", border: "1px solid gray" }}></div>
+                <div style={{ width: "1px", height: "80vh", border: "1px solid gray" }}></div>
                 <div style={{ width: "34%" }}>
                     <p>{selectedItemIds.length > 0 ? `${selectedItemIds.length} items selected` : "No items selected"}</p>
                     <p style={{ fontWeight: 'bolder', fontSize: "30px" }}>{selectedItemIds.length > 0 ? `Total Amount: ₹${totalPrice}` : ""}</p>
