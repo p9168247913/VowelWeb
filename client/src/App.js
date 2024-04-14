@@ -25,13 +25,17 @@ const App = () => {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
-      navigate('/login', { replace: true });
-     
+        // Allow navigation to /register route
+        if (window.location.pathname === '/register') {
+            return;
+        }
+        navigate('/login', { replace: true });
     } else if (initialLoad) {
-      navigate('/', { replace: true });
-      setInitialLoad(false);
+        navigate('/', { replace: true });
+        setInitialLoad(false);
     }
-  }, [navigate, initialLoad, toast]);
+}, [navigate, initialLoad]);
+
   return (
     <div>
       <Suspense fallback={loading}>

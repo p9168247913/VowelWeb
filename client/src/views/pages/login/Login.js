@@ -18,11 +18,17 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useToast } from '@chakra-ui/react';
 import baseUrl from 'src/URL/baseUrl';
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const toast = useToast();
+  const navigate = useNavigate()
+
+  const signup = (e) => {
+navigate('/register')
+  };
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -91,6 +97,7 @@ const Login = () => {
                         type="password"
                         placeholder="Password"
                         autoComplete="current-password"
+                        required
                         value={password} onChange={handlePasswordChange}
                       />
                     </CInputGroup>
@@ -100,11 +107,11 @@ const Login = () => {
                           Login
                         </CButton>
                       </CCol>
-                      {/* <CCol xs={6} className="text-right" style={{ marginTop: "40px", }}>
-                        <CButton color="link" style={{ color: "white", fontWeight: "400" }}>
-                          Forgot password?
+                      <CCol xs={6} className="text-right" style={{ marginTop: "40px", }}>
+                        <CButton onClick={signup} color="link" style={{ color: "white", fontWeight: "400" }}>
+                          Sign Up
                         </CButton>
-                      </CCol> */}
+                      </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
